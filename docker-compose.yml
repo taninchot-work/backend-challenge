@@ -1,0 +1,30 @@
+name: be-with-mongo
+services:
+  mongo:
+    image: mongo:latest
+    container_name: be-with-mongo-mongo
+    volumes:
+      - ./mongo_data:/data/db
+
+  mongo-express:
+    image: mongo-express:latest
+    container_name: be-with-mongo-mongo-express
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_URL: mongodb://mongo:27017
+    depends_on:
+      - mongo
+    restart: always
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: be-with-mongo-api
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./config.yaml:/app/config.yaml
+    depends_on:
+      - mongo

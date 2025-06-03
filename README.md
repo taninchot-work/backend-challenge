@@ -1,103 +1,80 @@
 # Backend Golang Coding Test
 
-## Objective
-Build a simple RESTful API in Golang that manages a list of users. Use MongoDB for persistence, JWT for authentication, and follow clean code practices.
+This project implements a RESTful API in Golang to manage a list of users, using MongoDB and JWT for authentication.
 
----
+## Project Setup and Run Instructions
 
-## Requirements
+### Prerequisites
 
-### 1. User Model
-Each user should have:
-- `ID` (auto-generated)
-- `Name` (string)
-- `Email` (string, unique)
-- `Password` (hashed)
-- `CreatedAt` (timestamp)
+- Go (version 1.24.0 or higher)
+- Docker and Docker Compose (if using Docker setup)
+- MongoDB (if running locally without Docker)
 
----
+### Local Setup (Without Docker)
 
-### 2. Authentication
+1. **Clone the repository:**
+   ```bash
+   git clone git@github.com/taninchot-work/backend-challenge.git
+   ```
 
-#### Functions
-- Register a new user.
-- Authenticate user and return a JWT.
+   ```bash
+   cd backend-challenge
+   ```
 
-#### JWT
-- Use JWT for protecting endpoints.
-- Use middleware to validate tokens.
-- Use HMAC (HS256) with a secret key.
+2. **Install dependencies:**
+   ```bash
+   go mod tidy
+   ```
 
----
+3. **Configure environment variables:**
+   Create a `config.yaml` file by copying `config.example.yaml` and update the necessary configurations, especially the
+   database connection details and JWT secret.
+   ```bash
+   cp config.example.yaml config.yaml
+   ```
 
-### 3. User Functions
+4. **Ensure MongoDB is running and accessible.**
 
-- Create a new user.
-- Fetch user by ID.
-- List all users.
-- Update a user's name or email.
-- Delete a user.
+5. **Run the application:**
+   ```bash
+   go run cmd/main.go
+   ```
+   The API server will start, typically on port that you configure.
 
----
+### Docker Setup
 
-### 4. MongoDB Integration
-- Use the official Go MongoDB driver.
-- Store and retrieve users from MongoDB.
+1. **Clone the repository:**
+   ```bash
+   git clone git clone github.com/taninchot-work/backend-challenge
+   cd backend-challenge
+   ```
+2. **Build and run with Docker Compose:**
+   ```bash
+   docker-compose up --build
+   ```
 
----
+   This will start the API service and a MongoDB instance. on port that you configure
 
-### 5. Middleware
-- Logging middleware that logs HTTP method, path, and execution time.
+### API Endpoints
 
----
+- **GET /api/v1/users/get/list**: List all users.
+- **GET /api/v1/users/get/me**: Fetch user by ID (requires JWT).
+- **POST /api/v1/users/register**: Register a new user.
+- **POST /api/v1/users/login**: Authenticate user and return a JWT.
+- **POST /api/v1/users/update**: Update a user's name or email (requires JWT).
+- **POST /api/v1/users/delete**: Delete a user (requires JWT).
 
-### 6. Concurrency Task
-- Run a background goroutine every 10 seconds that logs the number of users in the DB.
+### Api Documentation
 
----
+I provide a postman collection for testing the API endpoints. You can import it into Postman to test the API easily.
 
-### 7. Testing
-Write unit tests
+file: `postman_collection.json`
 
-Use Go’s `testing` package. Mock MongoDB where possible.
+### Protected Endpoints
 
----
+In the protected endpoints, you need to include the JWT in the Authorization header as follows:
 
-## Bonus (Optional)
-
-- Add Docker + `docker-compose` for API + MongoDB.
-- Use Go interfaces to abstract MongoDB operations for testability.
-- Add input validation (e.g., required fields, valid email).
-- Implement graceful shutdown using `context.Context`.
-- **gRPC Version**
-  - Create a `.proto` file for `CreateUser` and `GetUser`.
-  - Implement a gRPC server.
-  - (Optional) Secure gRPC with token metadata.
-- **Hexagonal Architecture**
-  - Structure the project using hexagonal (ports & adapters) architecture:
-    - Separate domain, application, and infrastructure layers.
-    - Use interfaces for data access and external dependencies.
-    - Keep business logic decoupled from frameworks and DB drivers.
-
----
-
-## Submission Guidelines
-
-- Submit a GitHub repo or zip file.
-- Include a `README.md` with:
-  - Project setup and run instructions
-  - JWT token usage guide
-  - Sample API requests/responses
-  - Any assumptions or decisions made
-
----
-
-## Evaluation Criteria
-
-- Code quality, structure, and readability
-- REST API correctness and completeness
-- JWT implementation and security
-- MongoDB usage and abstraction
-- Bonus: gRPC, Docker, validation, shutdown
-- Testing coverage and mocking
-- Use of idiomatic Go
+```http
+Authorization
+Bearer <your_jwt_token>
+```

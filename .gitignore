@@ -1,0 +1,11 @@
+# IntelliJ
+.idea
+
+# Config file
+config.yaml
+
+# Docker Data
+mongo_data
+
+# Coverage
+coverage.*

@@ -1,0 +1,13 @@
+restServer:
+  port: 3000
+  jwt:
+    secret: "jwtSecret"
+    expiresIn: 86400000
+    issuer: "ms_user"
+
+database:
+  host: "localhost"
+  port: 27017
+  databaseName: "ms_user"
+  connectionTimeout: 10000
+  maxPoolSize: 10
